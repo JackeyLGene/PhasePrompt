@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+*.log
+*.tmp
+local/
+private/
+secrets/
+phaseprompt_private/
+locomo_mc10.json
+locomo10.json
+

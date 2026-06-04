@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: "PhasePrompt: Structural Sidecar for Long-Context Compaction"
+message: "If you cite this research-preview repository, please cite the repository and the LoCoMo sidecar report."
+type: software
+authors:
+  - family-names: Liu
+    given-names: Jackey
+    email: jackey.l.gene@outlook.com
+date-released: "2026-06-04"
+repository-code: "https://github.com/JackeyLGene/PhasePrompt"
+abstract: "Research-preview artifacts for a query-free structural sidecar that improves long-conversation compaction in a LoCoMo-MC pilot."

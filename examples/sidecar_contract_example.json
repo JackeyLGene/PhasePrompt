@@ -1,0 +1,21 @@
+{
+  "input": {
+    "conversation_id": "example-conv",
+    "messages": [
+      {"id": "m1", "speaker": "A", "text": "I started a new job in March."},
+      {"id": "m2", "speaker": "B", "text": "How has the schedule changed?"},
+      {"id": "m3", "speaker": "A", "text": "The commute moved from mornings to late evenings."}
+    ]
+  },
+  "sidecar_output": {
+    "structural_hint": "Pay attention to the transition around m3: a stable topic shifts into a schedule change.",
+    "selected_message_ids": ["m1", "m3"],
+    "residue_labels": [
+      {"message_id": "m3", "label": "structural_turn"}
+    ]
+  },
+  "downstream_use": {
+    "compression_prompt": "Use the structural_hint when creating a query-agnostic memory summary."
+  }
+}
+

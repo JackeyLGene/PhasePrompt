@@ -1,0 +1,21 @@
+{
+  "run_id": "t2_main_20260604_1224",
+  "dataset": "locomo_mc10.json",
+  "conversations": {
+    "52f75af7": 199,
+    "99a5c214": 105,
+    "a190f2de": 193,
+    "93b73599": 260,
+    "0d7b27bf": 242,
+    "9d6e4b6f": 158,
+    "36dcaee5": 190,
+    "d67784a5": 239,
+    "098f926e": 196,
+    "fc3f79cf": 204
+  },
+  "qa_sample_count": 497,
+  "full_qa_count": 50,
+  "summary_budget_words": 800,
+  "compression_max_tokens": 1100,
+  "created_at": "20260604_1224"
+}
