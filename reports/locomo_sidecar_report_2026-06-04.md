@@ -13,7 +13,8 @@ The sidecar scoring layer itself uses:
 - zero LLM calls;
 - zero embeddings;
 - zero training;
-- zero query-time retrieval.
+- zero query-time retrieval;
+- online message-by-message state updates.
 
 The full evaluation pipeline used DeepSeek-chat for compression generation and
 QA answering.
@@ -58,6 +59,10 @@ conversation text is truncated.
 All 10 conversations were concatenated into one stream. A single LanguageWe
 instance accumulated structure across 5882 messages. Its compact structural
 hint was then used during query-agnostic conversation compression.
+
+Operationally, this means the sidecar does not need to reprocess the whole
+conversation at query time. Its state can be maintained during the conversation
+and reused when compaction is triggered.
 
 | Condition | Accuracy | vs REC |
 |-----------|----------|--------|

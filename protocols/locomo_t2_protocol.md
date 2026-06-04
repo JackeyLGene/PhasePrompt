@@ -11,8 +11,10 @@ compression quality?
 This is the agent-relevant setting:
 
 1. A long conversation has ended.
-2. The system must compress it before knowing future questions.
-3. Future QA uses the compressed memory.
+2. The sidecar has already updated its state message by message during the
+   conversation.
+3. The system compresses it before knowing future questions.
+4. Future QA uses the compressed memory.
 
 ## Dataset
 
@@ -23,7 +25,9 @@ LoCoMo-MC (`Percena/locomo-mc10`):
 - 10 choices per question;
 - exact-match letter scoring.
 
-The dataset itself is not redistributed in this repository.
+The dataset itself is not redistributed in this repository. Saved summaries are
+LLM-generated derivatives of LoCoMo-MC conversation content and remain subject
+to the source dataset's CC BY-NC 4.0 license.
 
 ## Main Conditions
 
@@ -70,6 +74,9 @@ Paired vs REC:
 All 10 conversations are concatenated into one stream. A single sidecar instance
 accumulates structure across all messages, then emits one compact hint used
 during each conversation summary.
+
+In deployment, the same update can be performed online as each message arrives,
+so compaction does not require a retrospective embedding or retrieval pass.
 
 Artifact:
 

@@ -22,6 +22,7 @@ The following may be public:
 - evaluation protocol;
 - artifact verification scripts;
 - high-level architecture diagrams;
+- the fact that the sidecar can update online as messages arrive;
 - toy interface examples;
 - limitations and failed/negative cases.
 
@@ -66,4 +67,3 @@ is narrow:
 No open-source license is granted for this repository. Viewing the repository
 does not grant rights to reuse, modify, redistribute, or commercialize its
 contents.
-

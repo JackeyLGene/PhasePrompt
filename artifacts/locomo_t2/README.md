@@ -33,6 +33,10 @@ This is a 23.7% reduction in QA input tokens relative to SUM_REC.
 ## Notes
 
 - The LoCoMo dataset is not redistributed here.
+- The saved per-conversation summaries are LLM-generated derivatives of
+  LoCoMo-MC conversation content.
+- LoCoMo-MC is licensed CC BY-NC 4.0; these derived artifacts are for
+  non-commercial research review only. See `../../THIRD_PARTY_NOTICES.md`.
 - Stream summaries were not saved separately in the pilot run.
 - These artifacts verify reported metrics, not the unpublished sidecar
   implementation.

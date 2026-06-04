@@ -38,6 +38,31 @@ def summarize(rows: list[dict], include_full: bool) -> None:
     for row in rows:
         by_cond[row.get("condition", "")].append(row)
 
+    qid_sets = {
+        cond: {r.get("qid") for r in group}
+        for cond, group in by_cond.items()
+        if cond != "FULL" and group
+    }
+    if qid_sets:
+        base_cond = next(iter(qid_sets))
+        base = qid_sets[base_cond]
+        for cond, qids in qid_sets.items():
+            if qids != base:
+                raise SystemExit(
+                    f"Condition {cond} has a different qid set than {base_cond}"
+                )
+
+    bad_accuracy = [
+        (row.get("qid"), row.get("condition"), row.get("accuracy"))
+        for row in rows
+        if type(row.get("accuracy")) is not bool
+    ]
+    if bad_accuracy:
+        qid, cond, value = bad_accuracy[0]
+        raise SystemExit(
+            f"Non-boolean accuracy value found: qid={qid} condition={cond} value={value!r}"
+        )
+
     print("Condition summary")
     print("-----------------")
     for cond in ORDER:

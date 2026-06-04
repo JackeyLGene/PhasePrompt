@@ -6,6 +6,11 @@ PhasePrompt is a research-preview repository for a query-free structural
 sidecar that watches a conversation stream and emits compact structural hints
 for downstream language models.
 
+The sidecar is **streaming-native**: it updates after each message during the
+conversation. When compaction is needed, the structural state is already
+available. No retrospective embedding pass, query-time retrieval pass, or extra
+LLM call is required at the sidecar layer.
+
 The current public release focuses on a single engineering result:
 
 > In a LoCoMo-MC pilot, LanguageWe structural hints improved DeepSeek-chat's
@@ -15,7 +20,8 @@ The current public release focuses on a single engineering result:
 This is not a leaderboard claim and not a full memory-system comparison. The
 result is a sidecar-gain claim: no model weights are changed, no embeddings are
 used by the sidecar, no training is performed, and no query-time retrieval is
-required by the sidecar scoring layer.
+required by the sidecar scoring layer. The sidecar state is updated online as
+messages arrive.
 
 ## Why This Matters
 
@@ -29,6 +35,38 @@ The sidecar asks:
 
 That makes it useful as an additive module rather than a replacement for RAG,
 long-context models, or summarization pipelines.
+
+Unlike offline compression or embedding pipelines, the structural state can be
+maintained continuously during the conversation and reused whenever a memory
+summary is needed.
+
+## How It Works
+
+The public version can be described without exposing the full implementation:
+
+1. **Token/message stream in.** Each message is treated as an ordered event in a
+   conversation stream.
+2. **Two structural views.** The sidecar tracks both current content activation
+   and how content transitions from one message to the next.
+3. **Finite-memory consolidation.** Repeated or stable patterns are reinforced;
+   weak or unreinforced residues are pruned.
+4. **Structural hint out.** When compaction is triggered, the sidecar emits a
+   compact hint describing which turns and residues look structurally important.
+
+In other words, PhasePrompt is not trying to understand the conversation
+semantically. It performs token-level structural stream processing: what is
+active now, how the stream just changed, and which changes survive finite-memory
+consolidation.
+
+The current controlled implementation uses this high-level contract:
+
+```text
+messages
+  -> online token/message features
+  -> content-state and transition-state updates
+  -> finite-memory structural residues
+  -> compact hint for conversation compression
+```
 
 ## Current Result
 
@@ -71,7 +109,8 @@ help recency.
 ```mermaid
 flowchart TD
     A["Conversation stream"] --> B["LanguageWe sidecar"]
-    B --> C["Structural hint prompt"]
+    B --> B1["Online structural state"]
+    B1 --> C["Structural hint prompt"]
     A --> D["Compression prompt"]
     C --> D
     D --> E["Strong LLM compressor"]
@@ -87,6 +126,7 @@ current production LanguageWe implementation is under controlled disclosure.
 ```text
 PhasePrompt/
   README.md
+  THIRD_PARTY_NOTICES.md
   docs/
     architecture.md
     disclosure_policy.md
@@ -161,6 +201,8 @@ For technical review, controlled implementation access, or research discussion:
   implementation.
 - A full protocol run should preserve stream summaries, stable qid sampling,
   tokenizer-based budgets, and all prompts.
+- Some saved artifacts are derived from LoCoMo-MC, which is licensed
+  CC BY-NC 4.0. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## License
 
@@ -174,3 +216,6 @@ permission from the author.
 Reports and result artifacts may be cited with attribution. Core implementation
 access is controlled while the disclosure and licensing policy is being
 finalized.
+
+Third-party dataset-derived artifacts remain subject to their source licenses,
+including the LoCoMo-MC CC BY-NC 4.0 non-commercial restriction.
