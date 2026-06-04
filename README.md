@@ -58,6 +58,13 @@ semantically. It performs token-level structural stream processing: what is
 active now, how the stream just changed, and which changes survive finite-memory
 consolidation.
 
+At the encoding layer, this is an SHP-style dual-axis projection. One axis
+tracks content-token presence in each turn; the other tracks directed
+token-transition structure across neighboring turns. Compression anchors are
+selected where these two symbolic views diverge. The method is token-only: it
+does not require embeddings, parsers, model training, or query-time retrieval at
+the sidecar layer.
+
 The current controlled implementation uses this high-level contract:
 
 ```text
